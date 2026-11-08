@@ -44,6 +44,7 @@ section.alt .card{background:var(--bg)}
 .card h3{margin:0 0 8px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:15px}
 .step{font:600 12px var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
 ul.tick{list-style:none;padding:0;margin:12px 0 0}ul.tick li{padding:4px 0 4px 26px;position:relative;font-size:15px;color:var(--muted)}
+ul.tick.cols{columns:2;column-gap:40px}ul.tick.cols li{break-inside:avoid}@media (max-width:900px){ul.tick.cols{columns:1}}
 ul.tick li::before{content:"";position:absolute;left:2px;top:11px;width:12px;height:7px;border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);transform:rotate(-45deg)}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}
@@ -72,7 +73,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
 <body>
 <header class="nav"><div class="wrap">
   <a class="brand" href="#top"><img src="assets/orchestx-mark.svg" alt="" width="34" height="34"><span><span class="wm-a">SONiC</span> <span class="wm-b">OrchestX</span></span></a>
-  <nav class="links"><a href="#how">How it works</a><a href="#services">Services</a><a href="#monitor">Monitoring</a><a href="#proof">Lab results</a><a href="#ops">Operations</a><a href="#roadmap">Roadmap</a></nav>
+  <nav class="links"><a href="#how">How it works</a><a href="#services">Services</a><a href="#monitor">Monitoring</a><a href="#proof">Lab results</a><a href="#ops">Operations</a><a href="#capabilities">Capabilities</a></nav>
 </div></header>
 
 <main id="top">
@@ -201,11 +202,10 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
 </div></section>
 
 <section id="ops"><div class="wrap">
-  <div class="grid2">
   <div>
     <h2>Built for day 2</h2>
     <p class="sub">Getting a fabric up once is the easy part. OrchestX is designed around safe, repeatable change and an honest view of the running network.</p>
-    <ul class="tick">
+    <ul class="tick cols">
       <li><b>Change control</b> - per-switch plan of the exact change; the deploy is tied to the intent revision that was reviewed and refused if the intent changed since</li>
       <li><b>Automatic rollback</b> - per-switch checkpoint; failed post-checks restore config and routing</li>
       <li><b>Config compliance</b> - every switch continuously compared with the intent; an out-of-band change shows up as out of sync</li>
@@ -215,29 +215,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
       <li><b>Backups and compare</b> - snapshot before every change and on a schedule; compare any two of backup, running and intent; restore</li>
       <li><b>Access control and audit</b> - viewer, operator and admin roles; read-only device CLI for operators; every action audited; secrets masked</li>
       <li><b>Multi-fabric</b> - one controller, many fabrics, each strictly scoped; fabric creation and discovery of new switches by LLDP from Fabric Administration</li>
-      <li><b>Rolling image upgrades</b> - one switch at a time: drain, install, reboot, verify, undrain; stops at the first failure</li>
     </ul>
-  </div>
-  <pre aria-label="Example API calls"><span class="c"># create an L2-only network and attach it to two sites</span>
-<span class="k">PUT</span>  /api/networks/backup  <span class="s">{"vlan": 70, "l2vni": 10070}</span>
-<span class="k">POST</span> /api/networks/backup/attachments <span class="s">{"switch": "leaf3", "port": "Ethernet16"}</span>
-<span class="k">POST</span> /api/networks/backup/attachments <span class="s">{"switch": "leaf5", "port": "Ethernet16"}</span>
-
-<span class="c"># review the exact change per switch, then deploy that revision</span>
-<span class="k">GET</span>  /api/intent/rev
-<span class="k">POST</span> /api/plan
-<span class="k">POST</span> /api/jobs/deploy   <span class="s">{"switches": ["leaf3", "leaf5"], "intent_rev": "c3595a851f28"}</span>
-
-<span class="c"># fabric-wide management services</span>
-<span class="k">PUT</span>  /api/settings <span class="s">{"ntp": {"servers": ["172.30.30.5"]}, "syslog": [{"address": "172.30.30.1", "port": 5514}]}</span>
-
-<span class="c"># drain a spine for maintenance, then bring it back</span>
-<span class="k">POST</span> /api/devices/spine1/lifecycle/drain
-<span class="k">POST</span> /api/devices/spine1/lifecycle/promote
-
-<span class="c"># prove it</span>
-<span class="k">POST</span> /api/jobs/validate
-<span class="k">GET</span>  /api/validation/latest   <span class="c"># 381/381</span></pre>
   </div>
   <div class="gallery">
     <figure><img src="assets/ui-change-control.png" alt="Change control: per-switch plan, all 15 devices in sync" loading="lazy"><figcaption>Change control: per-switch plan</figcaption></figure>
@@ -253,35 +231,31 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
   <h2>Engineering that holds up</h2>
   <p class="sub">Open networking means owning the details. Issues found in the lab are traced to the source and fixed there, not papered over.</p>
   <div class="grid3">
-    <div class="card"><h3>Upstream routing fix carried</h3><p>An FRR bug made a new VLAN take over a tenant's L3VNI, silently breaking inter-subnet routing. Traced to the upstream issue and its fix; our SONiC image carries the patch, and the controller detects and repairs the condition on stock images.</p></div>
+    <div class="card"><h3>Upstream routing fix carried</h3><p>An FRR bug made a new VLAN take over a tenant's L3VNI, silently breaking inter-subnet routing. Traced to the upstream issue and its fix; our SONiC image build includes the patch, and the controller detects and repairs the condition on stock images.</p></div>
     <div class="card"><h3>Critical fixes backported</h3><p>26 crash and correctness fixes for BGP, EVPN and zebra from FRR's stable branch, applied on top of SONiC's own patch set and verified to apply cleanly.</p></div>
     <div class="card"><h3>No false drift</h3><p>Rendered configuration matches what FRR and SONiC actually keep, so "in sync" means in sync. Diffs are computed by FRR's own reload logic.</p></div>
   </div>
 </div></section>
 
-<section id="roadmap"><div class="wrap">
-  <h2>Capabilities and roadmap</h2>
-  <p class="sub">What is proven in the lab today, and what comes next.</p>
+<section id="capabilities"><div class="wrap">
+  <h2>Capabilities</h2>
+  <p class="sub">Every capability below is implemented and proven on the live two-site lab.</p>
   <div class="table"><table>
     <thead><tr><th>Capability</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>eBGP underlay, BGP EVPN overlay, symmetric IRB, anycast gateway</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Multi-site with border-to-border DCI</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>L3 and L2-only networks, multi-tenant VRFs, hypervisor trunks</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Firewall service insertion (inter-tenant + internet, stateful policy, SNAT)</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>External VRF-lite handoff per tenant</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Plan / diff, transactional deploy, rollback, drift detection</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Web UI and REST API</td><td><span class="pill ok">Available</span></td></tr>
-      <tr><td>Monitoring: dashboard, alarms, event log, 24 h history, endpoint locator, config compliance</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Device lifecycle: drain / promote / RMA workflows (drain under traffic, no loss)</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Fabric settings: NTP, DNS, syslog, SNMP, AAA / TACACS+, banner, time zone</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Syslog collection and log search</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Role-based access, audit, device CLI, configuration backups and compare</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Multi-fabric with Fabric Administration; switch discovery by LLDP</td><td><span class="pill ok">Validated</span></td></tr>
-      <tr><td>Approval workflow for changes, per-fabric user access, links and interfaces views, bulk device actions, job history</td><td><span class="pill road">In development</span></td></tr>
-      <tr><td>MC-LAG dual-homed servers</td><td><span class="pill road">In test</span></td></tr>
-      <tr><td>Rolling image upgrade workflow</td><td><span class="pill road">In test</span></td></tr>
-      <tr><td>Streaming telemetry (gNMI), alarm notifications, zero-touch provisioning, single sign-on</td><td><span class="pill road">Roadmap</span></td></tr>
+      <tr><td>eBGP underlay, BGP EVPN overlay, symmetric IRB, anycast gateway</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Multi-site with border-to-border DCI</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>L3 and L2-only networks, multi-tenant VRFs, hypervisor trunks</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Firewall service insertion (inter-tenant + internet, stateful policy, SNAT)</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>External VRF-lite handoff per tenant</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Plan / diff, transactional deploy, rollback, drift detection</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Web UI and REST API</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Monitoring: dashboard, alarms, event log, 24 h history, endpoint locator, config compliance</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Device lifecycle: drain / promote / RMA workflows (drain under traffic, no loss)</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Fabric settings: NTP, DNS, syslog, SNMP, AAA / TACACS+, banner, time zone</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Syslog collection and log search</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Role-based access, audit, device CLI, configuration backups and compare</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Multi-fabric with Fabric Administration; switch discovery by LLDP</td><td><span class="pill ok">Fully Supported</span></td></tr>
     </tbody>
   </table></div>
 </div></section>
