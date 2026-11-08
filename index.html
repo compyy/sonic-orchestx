@@ -222,6 +222,9 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
       <li><b>Device lifecycle</b> - blueprint, staging, managed, maintenance and RMA stages; drain and promote run as checked, logged workflows. Draining a spine under live traffic: <b>0 of 1,400 packets lost</b></li>
       <li><b>Fabric settings</b> - NTP, DNS, syslog, SNMP, AAA / TACACS+, login banner and time zone, applied fabric-wide and watched for drift</li>
       <li><b>Logs</b> - syslog from every switch collected by the controller, searchable per switch and severity, with a live tail</li>
+      <li><b>Right-click actions</b> - on any switch in the topology or inventory: open, run a command, back up, compare running vs intent, drain, promote, BGP summary and interfaces</li>
+      <li><b>Device CLI</b> - run commands on a switch from the browser and see the output in place; operators get a read-only command set, every command is audited</li>
+      <li><b>Links and interfaces</b> - every intended link with its /31 addressing, both ends' state and an LLDP cabling check; every interface with purpose, rates, errors, flaps and neighbour</li>
       <li><b>Backups and compare</b> - snapshot before every change and on a schedule; compare any two of backup, running and intent; restore</li>
       <li><b>Access control and audit</b> - viewer, operator and admin roles; read-only device CLI for operators; every action audited; secrets masked</li>
       <li><b>Multi-fabric</b> - one controller, many fabrics, each strictly scoped; fabric creation and discovery of new switches by LLDP from Fabric Administration</li>
@@ -229,6 +232,10 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
   </div>
   <div class="gallery">
     <figure><div class="thumb"><img src="assets/ui-change-control.png" alt="Change control: per-switch plan, all 15 devices in sync" loading="lazy"></div><figcaption>Change control: per-switch plan<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
+    <figure><div class="thumb"><img src="assets/ui-context-menu.png" alt="Right-click menu on spine2 in the topology: open device, run command, back up, compare running vs intent, drain, promote, BGP summary, interfaces" loading="lazy"></div><figcaption>Right-click actions on any switch<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
+    <figure><div class="thumb"><img src="assets/ui-cli.png" alt="CLI window for leaf4 showing show ip bgp summary and show vxlan tunnel output" loading="lazy"></div><figcaption>Device CLI: live command output<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
+    <figure><div class="thumb"><img src="assets/ui-links.png" alt="Links: every intended link with /31 addressing, both ends up and LLDP matching the intent" loading="lazy"></div><figcaption>Links with LLDP cabling check<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
+    <figure><div class="thumb"><img src="assets/ui-interfaces.png" alt="Interfaces: every port with purpose, admin and oper state, rates, errors, flaps, LLDP neighbour and networks" loading="lazy"></div><figcaption>Interfaces across the fabric<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
     <figure><div class="thumb"><img src="assets/ui-workflows.png" alt="Workflow queue with drain and promote workflows and their steps" loading="lazy"></div><figcaption>Lifecycle workflows<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
     <figure><div class="thumb"><img src="assets/ui-devices.png" alt="Device inventory with stage, health and config compliance per switch" loading="lazy"></div><figcaption>Inventory with stage and compliance<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
     <figure><div class="thumb"><img src="assets/ui-settings.png" alt="Fabric settings: NTP, DNS, syslog, SNMP, AAA and banner" loading="lazy"></div><figcaption>Fabric settings<span class="zoom-hint">Click to enlarge</span></figcaption></figure>
