@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SONiC OrchestX</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="SONiC OrchestX: intent-driven orchestration for community SONiC. Design, deploy, verify and operate multi-site VXLAN EVPN data center fabrics.">
+<style>
+:root{
+  --bg:#f3f5f7;--surface:#fff;--surface-2:#f7f9fb;--text:#1f2a37;--muted:#5f6b7a;--border:#dbe1e8;
+  --accent:#0a66c2;--accent-2:#1f8a8a;--accent-3:#a2559e;--ok:#1f8a4c;--ok-bg:#e5f5ec;--warn:#a96500;--warn-bg:#fdf1dc;
+  --code-bg:#0f1722;--code-text:#d7dee8;--shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
+  --radius:14px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--accent)}img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+header.nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+header.nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.brand img{width:34px;height:34px}.wm-a{color:#3d4652;font-weight:500;letter-spacing:.02em}.wm-b{background:linear-gradient(90deg,#36a3d3,#2f64cf);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.links{display:flex;gap:20px;margin-left:auto}.links a{color:var(--muted);text-decoration:none;font-size:15px}.links a:hover{color:var(--text)}
+.hero{padding-top:72px;padding-bottom:40px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:var(--ok);background:var(--ok-bg);padding:4px 12px;border-radius:999px}
+.eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+h1{font-size:clamp(34px,5vw,56px);line-height:1.08;letter-spacing:-.02em;margin:18px 0 16px;max-width:900px}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:760px;margin:0 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text);background:var(--surface)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px 0 0}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:30px;letter-spacing:-.01em}.stat span{color:var(--muted);font-size:14px}
+.shot{margin:44px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);background:var(--surface)}
+.shot figcaption{font-size:14px;color:var(--muted);padding:10px 16px;border-top:1px solid var(--border)}
+section{padding:72px 0}section.alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+h2{font-size:clamp(26px,3.2vw,36px);letter-spacing:-.015em;margin:0 0 10px}
+.sub{color:var(--muted);max-width:760px;margin:0 0 36px;font-size:17px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+section.alt .card{background:var(--bg)}
+.card h3{margin:0 0 8px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:15px}
+.step{font:600 12px var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+ul.tick{list-style:none;padding:0;margin:12px 0 0}ul.tick li{padding:4px 0 4px 26px;position:relative;font-size:15px;color:var(--muted)}
+ul.tick li::before{content:"";position:absolute;left:2px;top:11px;width:12px;height:7px;border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);transform:rotate(-45deg)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:600;background:var(--surface-2)}
+.table{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface);overflow-x:auto}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.road{background:var(--warn-bg);color:var(--warn)}
+.bars{display:grid;gap:10px}.bar{display:grid;grid-template-columns:110px 1fr 72px;gap:12px;align-items:center;font-size:14px}
+.bar .track{height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden}.bar .fill{height:100%;background:var(--ok);border-radius:6px}
+.bar b{font-variant-numeric:tabular-nums;text-align:right}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:12px;padding:18px 20px;overflow-x:auto;font:13.5px/1.6 var(--mono);margin:0}
+pre .c{color:#7f8ea3}pre .k{color:#8fb7ff}pre .s{color:#9fdcae}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.gallery figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+.gallery figcaption{font-size:13px;color:var(--muted);padding:8px 12px}
+.diagram{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.diagram svg{width:100%;height:auto}
+.diagram text{fill:var(--text);font:13px system-ui,sans-serif}.diagram .m{fill:var(--muted);font-size:11.5px}
+.diagram .box{fill:var(--surface-2);stroke:var(--border)}.diagram .sp{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+.diagram .lf{fill:var(--surface);stroke:var(--accent-2);stroke-width:2}.diagram .bd{fill:var(--surface);stroke:var(--accent-3);stroke-width:2}
+.diagram .ln{stroke:var(--border);stroke-width:1.5}.diagram .dci{stroke:#d0752c;stroke-width:3;stroke-dasharray:7 5}
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--border)}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.grid3,.grid2,.gallery{grid-template-columns:1fr}.links{display:none}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top"><img src="assets/orchestx-mark.svg" alt="" width="34" height="34"><span><span class="wm-a">SONiC</span> <span class="wm-b">OrchestX</span></span></a>
+  <nav class="links"><a href="#how">How it works</a><a href="#services">Services</a><a href="#monitor">Monitoring</a><a href="#proof">Lab results</a><a href="#ops">Operations</a><a href="#roadmap">Roadmap</a></nav>
+</div></header>
+
+<main id="top">
+<div class="wrap hero">
+  <span class="eyebrow"><i></i>Validated on a live multi-site lab - 381/381 checks</span>
+  <h1>Intent-driven VXLAN EVPN fabrics on open SONiC.</h1>
+  <p class="lead"><b>SONiC OrchestX</b> is a fabric orchestrator for open SONiC switches. Describe your fabric and tenant services once: it renders, diffs and deploys SONiC configuration,
+    proves the result (control plane, cabling and a full connectivity matrix including tenant isolation), then keeps watching it.</p>
+  <div class="cta"><a class="btn primary" href="#proof">See the lab results</a><a class="btn" href="#ops">Day-2 operations</a></div>
+  <div class="stats">
+    <div class="stat"><b>2 sites</b><span>DC1 + DC2 joined by an EVPN DCI</span></div>
+    <div class="stat"><b>14 switches</b><span>two symmetric sites, 7 switches each</span></div>
+    <div class="stat"><b>381 / 381</b><span>automated checks passing</span></div>
+    <div class="stat"><b>Firewall</b><span>policy-enforced between tenants and to the internet</span></div>
+  </div>
+  <figure class="shot"><img src="assets/ui-dashboard.png" alt="Controller dashboard: device, alarm, BGP, link, service and validation KPIs, fabric throughput chart and device health table" width="1600" height="1000" loading="eager">
+    <figcaption>Fabric dashboard of the running lab: live health of 14 switches and the firewall, config compliance against the intent, alarms, BGP sessions, fabric links, services, throughput and the last validation, polled every 30 seconds.</figcaption></figure>
+</div>
+
+<section id="how" class="alt"><div class="wrap">
+  <h2>From intent to a verified fabric</h2>
+  <p class="sub">One declarative model drives everything. Nothing reaches a switch before it passes validation, and nothing is called done before it is measured.</p>
+  <div class="grid3">
+    <div class="card"><div class="step">1 - Design</div><h3>Fabric intent</h3><p>Sites, switches, links, ASNs and address pools in one model. Overlapping subnets, reused ports, VNI/VLAN collisions and pools that clash with management are rejected up front.</p></div>
+    <div class="card"><div class="step">2 - Plan</div><h3>Exact diff per switch</h3><p>Running config is read from every switch and compared with the intent: CONFIG_DB changes as JSON Patch, routing changes as an FRR diff. Review before anything changes.</p></div>
+    <div class="card"><div class="step">3 - Deploy</div><h3>Transactional, per switch</h3><p>Live changes through SONiC's generic config updater with a checkpoint per switch. Post-checks fail? The switch is rolled back automatically.</p></div>
+    <div class="card"><div class="step">4 - Verify</div><h3>Prove it works</h3><p>BGP and EVPN sessions, VNIs and L3VNI bindings, remote VTEPs, LLDP cabling against the design, and a host-to-host ping matrix that also proves what must stay blocked.</p></div>
+    <div class="card"><div class="step">5 - Operate</div><h3>Drift, heal, history</h3><p>Out-of-band changes show up as drift. Known data-plane faults are detected and repaired. Every deploy and intent edit is recorded with its diff and author.</p></div>
+    <div class="card"><div class="step">6 - Integrate</div><h3>API first</h3><p>Everything in the UI is a REST call: services, plan, deploy, validate, upgrade, change log. Token auth, background jobs, OpenAPI docs.</p></div>
+  </div>
+</div></section>
+
+<section id="services"><div class="wrap grid2">
+  <div>
+    <h2>Tenant services, the way operators ask for them</h2>
+    <p class="sub">VRFs and networks are created in the UI or API and attached to switch ports. The controller works out where VRFs, VNIs, gateways and trunk members have to exist.</p>
+    <ul class="tick">
+      <li><b>L3 networks</b> - distributed anycast gateway, symmetric IRB, stretched across sites</li>
+      <li><b>L2-only networks</b> - bridged VNIs with no gateway, e.g. storage or cluster heartbeat</li>
+      <li><b>Multi-tenancy</b> - one VRF per tenant with its own L3VNI; isolation is tested, not assumed</li>
+      <li><b>Hypervisor trunks</b> - tagged ports carrying routed and L2-only VLANs together (vMotion across sites)</li>
+      <li><b>Firewall service</b> - inserted on the border leaf for traffic between tenants and to the internet; stateful, default deny, policies such as "web to db on TCP 5432"</li>
+      <li><b>External connectivity</b> - per-tenant VRF-lite handoff on the border leaf with eBGP, source NAT to the internet</li>
+      <li><b>Multi-site</b> - border-to-border DCI with eBGP underlay and EVPN, VXLAN end to end</li>
+    </ul>
+  </div>
+  <figure class="shot" style="margin:0"><img src="assets/ui-services.png" alt="Networks and tenants view: networks with type, VRF, VLAN, VNI, gateway, port attachments and firewall policies" width="1600" height="1000" loading="lazy">
+    <figcaption>Networks and tenants: L3 and L2 networks, attachments and firewall policies; edits are validated before they are saved.</figcaption></figure>
+</div></section>
+
+<section id="monitor" class="alt"><div class="wrap">
+  <h2>Monitoring and assurance</h2>
+  <p class="sub">The controller keeps comparing the live fabric with the intent. When they disagree it raises an alarm, and when the fabric recovers the alarm clears itself.</p>
+  <div class="grid2">
+    <figure class="shot" style="margin:0"><img src="assets/ui-fabric.png" alt="Topology with switches, firewall, internet and hosts discovered at the edge" loading="lazy">
+      <figcaption>Topology with every host drawn under the switch port where the fabric learned it (EVPN endpoint discovery).</figcaption></figure>
+    <div>
+      <ul class="tick">
+        <li><b>Live state every 30 seconds</b> - CPU, memory, interfaces and rates, BGP per VRF, VNIs, MACs, remote VTEPs, LLDP, containers; 24 hours of history</li>
+        <li><b>Alarms that know the design</b> - BGP sessions the intent expects, fabric links, cabling against LLDP, VNIs and L3VNI bindings, containers, thresholds, config drift</li>
+        <li><b>Endpoint locator</b> - every host with MAC, IP, network, switch and port, learned from EVPN</li>
+        <li><b>Service health</b> - each network across all switches that carry it; firewall sessions per policy</li>
+        <li><b>Proven under failure</b> - link down raised in 27 s and cleared 18 s after repair; a manual change outside the controller flagged as drift within a minute</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="proof" class="alt"><div class="wrap">
+  <h2>Lab results, not slideware</h2>
+  <p class="sub">Community SONiC 202605 virtual switches in a two-site topology, configured end to end by OrchestX. Two sites with two spines, four leaves and a border leaf each. Every number below comes from the controller's own validation run.</p>
+  <div class="grid2">
+    <div class="diagram">
+      <svg viewBox="0 0 640 330" role="img" aria-label="Lab topology: two sites, each with two spines, four leaves and a border leaf; DCI between the border leaves; firewall on the DC1 border leaf">
+        <rect class="box" x="6" y="8" width="306" height="232" rx="12"/><rect class="box" x="328" y="8" width="306" height="232" rx="12"/>
+        <text x="18" y="28" class="m">DC1  spine AS 65000</text><text x="340" y="28" class="m">DC2  spine AS 65200</text>
+        <g class="ln"><line x1="125" y1="78" x2="39" y2="150"/><line x1="125" y1="78" x2="95" y2="150"/><line x1="125" y1="78" x2="151" y2="150"/><line x1="125" y1="78" x2="207" y2="150"/><line x1="125" y1="78" x2="272" y2="150"/><line x1="205" y1="78" x2="39" y2="150"/><line x1="205" y1="78" x2="95" y2="150"/><line x1="205" y1="78" x2="151" y2="150"/><line x1="205" y1="78" x2="207" y2="150"/><line x1="205" y1="78" x2="272" y2="150"/><line x1="447" y1="78" x2="368" y2="150"/><line x1="447" y1="78" x2="433" y2="150"/><line x1="447" y1="78" x2="489" y2="150"/><line x1="447" y1="78" x2="545" y2="150"/><line x1="447" y1="78" x2="601" y2="150"/><line x1="527" y1="78" x2="368" y2="150"/><line x1="527" y1="78" x2="433" y2="150"/><line x1="527" y1="78" x2="489" y2="150"/><line x1="527" y1="78" x2="545" y2="150"/><line x1="527" y1="78" x2="601" y2="150"/></g>
+        <line class="dci" x1="304" y1="166" x2="336" y2="166"/><text x="300" y="158" class="m">DCI</text>
+        <rect class="sp" x="92" y="50" width="66" height="28" rx="7"/><text x="101" y="69">spine1</text>
+        <rect class="sp" x="172" y="50" width="66" height="28" rx="7"/><text x="181" y="69">spine2</text>
+        <rect class="sp" x="414" y="50" width="66" height="28" rx="7"/><text x="423" y="69">spine3</text>
+        <rect class="sp" x="494" y="50" width="66" height="28" rx="7"/><text x="503" y="69">spine4</text>
+        <rect class="lf" x="14" y="150" width="50" height="30" rx="7"/><text x="20" y="170">leaf1</text>
+        <rect class="lf" x="70" y="150" width="50" height="30" rx="7"/><text x="76" y="170">leaf2</text>
+        <rect class="lf" x="126" y="150" width="50" height="30" rx="7"/><text x="132" y="170">leaf3</text>
+        <rect class="lf" x="182" y="150" width="50" height="30" rx="7"/><text x="188" y="170">leaf4</text>
+        <rect class="bd" x="240" y="150" width="64" height="30" rx="7"/><text x="246" y="170">border1</text>
+        <rect class="bd" x="336" y="150" width="64" height="30" rx="7"/><text x="342" y="170">border2</text>
+        <rect class="lf" x="408" y="150" width="50" height="30" rx="7"/><text x="414" y="170">leaf5</text>
+        <rect class="lf" x="464" y="150" width="50" height="30" rx="7"/><text x="470" y="170">leaf6</text>
+        <rect class="lf" x="520" y="150" width="50" height="30" rx="7"/><text x="526" y="170">leaf7</text>
+        <rect class="lf" x="576" y="150" width="50" height="30" rx="7"/><text x="582" y="170">leaf8</text>
+        <text x="18" y="206" class="m">web, app, db, storage (L2), ESXi trunk</text>
+        <text x="340" y="206" class="m">web, app, db, storage (L2), ESXi trunk</text>
+        <line class="ln" x1="272" y1="180" x2="272" y2="256"/>
+        <rect x="232" y="256" width="80" height="28" rx="7" style="fill:var(--surface);stroke:#c8382f;stroke-width:2"/><text x="244" y="275">firewall</text>
+        <line class="ln" x1="312" y1="270" x2="352" y2="270"/>
+        <rect class="box" x="352" y="256" width="86" height="28" rx="7"/><text x="360" y="275" class="m">internet (NAT)</text>
+        <text x="18" y="300" class="m">tenant1: web, app  |  tenant2: db  - between tenants and to the internet only via firewall policy</text>
+      </svg>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:14px">Validation run: 381 of 381 checks passed</h3>
+      <div class="bars" id="bars"></div>
+      <p style="margin-top:14px;font-size:13px">Isolation checks are pings that must <b>fail</b>: flows the firewall policy does not allow, and L2-only networks to routed ones. Firewall checks open real TCP connections, allowed and denied.</p>
+    </div>
+  </div>
+  <div class="table" style="margin-top:24px"><table>
+    <thead><tr><th>Service</th><th>What was tested</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>L3 across sites</td><td>web host in DC1 to app host in DC2 and back (routed through the tenant VRF over the DCI)</td><td><span class="pill ok">0% loss</span></td></tr>
+      <tr><td>L2-only stretched</td><td>storage hosts in DC1 and DC2 on one bridged VNI, no gateway</td><td><span class="pill ok">0% loss</span></td></tr>
+      <tr><td>vMotion over DCI</td><td>two ESXi-style trunks in different sites on the L2-only vMotion VLAN</td><td><span class="pill ok">0% loss</span></td></tr>
+      <tr><td>Firewall: allowed</td><td>web and app to the database on TCP 5432; app to db ping; app in DC1 to db in DC2 through the firewall</td><td><span class="pill ok">connects</span></td></tr>
+      <tr><td>Firewall: denied</td><td>web to db ping, any network to db on TCP 443, db to web (no policy in that direction)</td><td><span class="pill ok">blocked</span></td></tr>
+      <tr><td>Internet via firewall</td><td>tenant1 ICMP + HTTPS from both sites; db only HTTPS (patching), no ping; source NAT</td><td><span class="pill ok">as designed</span></td></tr>
+      <tr><td>Isolation</td><td>every flow the policies do not allow, and every L2-only to routed pair, must be unreachable</td><td><span class="pill ok">114/114 blocked</span></td></tr>
+      <tr><td>Cabling</td><td>every link in the design matched against LLDP neighbours, both directions</td><td><span class="pill ok">42/42</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="gallery">
+    <figure><img src="assets/ui-validation.png" alt="Validation view with check groups and connectivity matrix" loading="lazy"><figcaption>Validation and connectivity matrix</figcaption></figure>
+    <figure><img src="assets/ui-device-leaf1.png" alt="Device page for leaf1 with KPIs, lifecycle stage and actions, CPU, memory and throughput history" loading="lazy"><figcaption>Device view: lifecycle, history, interfaces, BGP, EVPN</figcaption></figure>
+    <figure><img src="assets/ui-health.png" alt="Service health with per-switch VNI state and firewall policy hit counters" loading="lazy"><figcaption>Service health and firewall policy hits</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="ops"><div class="wrap">
+  <div class="grid2">
+  <div>
+    <h2>Built for day 2</h2>
+    <p class="sub">Getting a fabric up once is the easy part. OrchestX is designed around safe, repeatable change and an honest view of the running network.</p>
+    <ul class="tick">
+      <li><b>Change control</b> - per-switch plan of the exact change; the deploy is tied to the intent revision that was reviewed and refused if the intent changed since</li>
+      <li><b>Automatic rollback</b> - per-switch checkpoint; failed post-checks restore config and routing</li>
+      <li><b>Config compliance</b> - every switch continuously compared with the intent; an out-of-band change shows up as out of sync</li>
+      <li><b>Device lifecycle</b> - blueprint, staging, managed, maintenance and RMA stages; drain and promote run as checked, logged workflows. Draining a spine under live traffic: <b>0 of 1,400 packets lost</b></li>
+      <li><b>Fabric settings</b> - NTP, DNS, syslog, SNMP, AAA / TACACS+, login banner and time zone, applied fabric-wide and watched for drift</li>
+      <li><b>Logs</b> - syslog from every switch collected by the controller, searchable per switch and severity, with a live tail</li>
+      <li><b>Backups and compare</b> - snapshot before every change and on a schedule; compare any two of backup, running and intent; restore</li>
+      <li><b>Access control and audit</b> - viewer, operator and admin roles; read-only device CLI for operators; every action audited; secrets masked</li>
+      <li><b>Multi-fabric</b> - one controller, many fabrics, each strictly scoped; fabric creation and discovery of new switches by LLDP from Fabric Administration</li>
+      <li><b>Rolling image upgrades</b> - one switch at a time: drain, install, reboot, verify, undrain; stops at the first failure</li>
+    </ul>
+  </div>
+  <pre aria-label="Example API calls"><span class="c"># create an L2-only network and attach it to two sites</span>
+<span class="k">PUT</span>  /api/networks/backup  <span class="s">{"vlan": 70, "l2vni": 10070}</span>
+<span class="k">POST</span> /api/networks/backup/attachments <span class="s">{"switch": "leaf3", "port": "Ethernet16"}</span>
+<span class="k">POST</span> /api/networks/backup/attachments <span class="s">{"switch": "leaf5", "port": "Ethernet16"}</span>
+
+<span class="c"># review the exact change per switch, then deploy that revision</span>
+<span class="k">GET</span>  /api/intent/rev
+<span class="k">POST</span> /api/plan
+<span class="k">POST</span> /api/jobs/deploy   <span class="s">{"switches": ["leaf3", "leaf5"], "intent_rev": "c3595a851f28"}</span>
+
+<span class="c"># fabric-wide management services</span>
+<span class="k">PUT</span>  /api/settings <span class="s">{"ntp": {"servers": ["172.30.30.5"]}, "syslog": [{"address": "172.30.30.1", "port": 5514}]}</span>
+
+<span class="c"># drain a spine for maintenance, then bring it back</span>
+<span class="k">POST</span> /api/devices/spine1/lifecycle/drain
+<span class="k">POST</span> /api/devices/spine1/lifecycle/promote
+
+<span class="c"># prove it</span>
+<span class="k">POST</span> /api/jobs/validate
+<span class="k">GET</span>  /api/validation/latest   <span class="c"># 381/381</span></pre>
+  </div>
+  <div class="gallery">
+    <figure><img src="assets/ui-change-control.png" alt="Change control: per-switch plan, all 15 devices in sync" loading="lazy"><figcaption>Change control: per-switch plan</figcaption></figure>
+    <figure><img src="assets/ui-workflows.png" alt="Workflow queue with drain and promote workflows and their steps" loading="lazy"><figcaption>Lifecycle workflows</figcaption></figure>
+    <figure><img src="assets/ui-devices.png" alt="Device inventory with stage, health and config compliance per switch" loading="lazy"><figcaption>Inventory with stage and compliance</figcaption></figure>
+    <figure><img src="assets/ui-settings.png" alt="Fabric settings: NTP, DNS, syslog, SNMP, AAA and banner" loading="lazy"><figcaption>Fabric settings</figcaption></figure>
+    <figure><img src="assets/ui-logs.png" alt="Logs collected from every switch with severity and program" loading="lazy"><figcaption>Syslog from every switch</figcaption></figure>
+    <figure><img src="assets/ui-admin-fabrics.png" alt="Fabric Administration: all fabrics with health and validation" loading="lazy"><figcaption>Fabric Administration</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2>Engineering that holds up</h2>
+  <p class="sub">Open networking means owning the details. Issues found in the lab are traced to the source and fixed there, not papered over.</p>
+  <div class="grid3">
+    <div class="card"><h3>Upstream routing fix carried</h3><p>An FRR bug made a new VLAN take over a tenant's L3VNI, silently breaking inter-subnet routing. Traced to the upstream issue and its fix; our SONiC image carries the patch, and the controller detects and repairs the condition on stock images.</p></div>
+    <div class="card"><h3>Critical fixes backported</h3><p>26 crash and correctness fixes for BGP, EVPN and zebra from FRR's stable branch, applied on top of SONiC's own patch set and verified to apply cleanly.</p></div>
+    <div class="card"><h3>No false drift</h3><p>Rendered configuration matches what FRR and SONiC actually keep, so "in sync" means in sync. Diffs are computed by FRR's own reload logic.</p></div>
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <h2>Capabilities and roadmap</h2>
+  <p class="sub">What is proven in the lab today, and what comes next.</p>
+  <div class="table"><table>
+    <thead><tr><th>Capability</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>eBGP underlay, BGP EVPN overlay, symmetric IRB, anycast gateway</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Multi-site with border-to-border DCI</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>L3 and L2-only networks, multi-tenant VRFs, hypervisor trunks</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Firewall service insertion (inter-tenant + internet, stateful policy, SNAT)</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>External VRF-lite handoff per tenant</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Plan / diff, transactional deploy, rollback, drift detection</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Web UI and REST API</td><td><span class="pill ok">Available</span></td></tr>
+      <tr><td>Monitoring: dashboard, alarms, event log, 24 h history, endpoint locator, config compliance</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Device lifecycle: drain / promote / RMA workflows (drain under traffic, no loss)</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Fabric settings: NTP, DNS, syslog, SNMP, AAA / TACACS+, banner, time zone</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Syslog collection and log search</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Role-based access, audit, device CLI, configuration backups and compare</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Multi-fabric with Fabric Administration; switch discovery by LLDP</td><td><span class="pill ok">Validated</span></td></tr>
+      <tr><td>Approval workflow for changes, per-fabric user access, links and interfaces views, bulk device actions, job history</td><td><span class="pill road">In development</span></td></tr>
+      <tr><td>MC-LAG dual-homed servers</td><td><span class="pill road">In test</span></td></tr>
+      <tr><td>Rolling image upgrade workflow</td><td><span class="pill road">In test</span></td></tr>
+      <tr><td>Streaming telemetry (gNMI), alarm notifications, zero-touch provisioning, single sign-on</td><td><span class="pill road">Roadmap</span></td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">SONiC OrchestX is an independent project. SONiC is an open-source network operating system hosted by the Linux Foundation; this project is not affiliated with or endorsed by the Linux Foundation or the SONiC project. Lab results from community SONiC 202605 virtual switches.</div></footer>
+
+<script>
+(function(){
+  var groups={bgp:[30,30],cabling:[42,42],evpn:[30,30],firewall:[9,9],isolation:[114,114],ping:[139,139],vxlan:[17,17]};
+  var labels={bgp:"BGP sessions",cabling:"LLDP cabling",evpn:"EVPN / L3VNI",firewall:"Firewall policy",isolation:"Isolation",ping:"Reachability",vxlan:"VXLAN / VTEPs"};
+  var box=document.getElementById("bars");
+  Object.keys(groups).forEach(function(k){
+    var ok=groups[k][0],n=groups[k][1],row=document.createElement("div");row.className="bar";
+    var l=document.createElement("span");l.textContent=labels[k];
+    var t=document.createElement("div");t.className="track";var f=document.createElement("div");f.className="fill";f.style.width=(100*ok/n)+"%";t.appendChild(f);
+    var b=document.createElement("b");b.textContent=ok+"/"+n;
+    row.append(l,t,b);box.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>

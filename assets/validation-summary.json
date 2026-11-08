@@ -1,0 +1,1 @@
+{"time": "2026-11-08T12:29:13+00:00", "passed": 282, "total": 282, "seconds": 59, "groups": {"bgp": [24, 24], "cabling": [28, 28], "evpn": [24, 24], "isolation": [104, 104], "ping": [89, 89], "vxlan": [13, 13]}}
