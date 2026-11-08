@@ -30,9 +30,9 @@ h1{font-size:clamp(34px,5vw,56px);line-height:1.08;letter-spacing:-.02em;margin:
 .cta{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--border);color:var(--text);background:var(--surface)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px 0 0}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:44px 0 0}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
-.stat b{display:block;font-size:30px;letter-spacing:-.01em}.stat span{color:var(--muted);font-size:14px}
+.stat b{display:block;font-size:30px;letter-spacing:-.01em}.stat.txt b{font-size:21px;line-height:1.25;margin:4px 0 8px}.stat span{color:var(--muted);font-size:14px}
 .shot{margin:44px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);background:var(--surface)}
 .shot figcaption{font-size:14px;color:var(--muted);padding:10px 16px;border-top:1px solid var(--border)}
 section{padding:72px 0}section.alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -79,7 +79,7 @@ figure img{cursor:zoom-in}
 .diagram .lf{fill:var(--surface);stroke:var(--accent-2);stroke-width:2}.diagram .bd{fill:var(--surface);stroke:var(--accent-3);stroke-width:2}
 .diagram .ln{stroke:var(--border);stroke-width:1.5}.diagram .dci{stroke:#d0752c;stroke-width:3;stroke-dasharray:7 5}
 footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--border)}
-@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.grid3,.grid2,.gallery{grid-template-columns:1fr}.links{display:none}#lb .prev,#lb .next{top:auto;bottom:18px}}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stats .stat:last-child{grid-column:1/-1}.grid3,.grid2,.gallery{grid-template-columns:1fr}.links{display:none}#lb .prev,#lb .next{top:auto;bottom:18px}}
 </style>
 </head>
 <body>
@@ -97,7 +97,8 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
     <div class="stat"><b>2 sites</b><span>DC1 + DC2 joined by an EVPN DCI</span></div>
     <div class="stat"><b>14 switches</b><span>two symmetric sites, 7 switches each</span></div>
     <div class="stat"><b>381 / 381</b><span>automated checks passing</span></div>
-    <div class="stat"><b>Vendor Firewall Integration</b><span>Fortinet, Palo Alto, Cisco: tenant policy pushed as intent</span></div>
+    <div class="stat txt"><b>Vendor Firewall Integration</b><span>Fortinet, Palo Alto, Cisco: tenant policy pushed as intent</span></div>
+    <div class="stat txt"><b>VMware vCenter Integration</b><span>VMs and ESXi hosts mapped to switch ports; port VLANs follow port groups and vMotion</span></div>
   </div>
   <figure class="shot"><img src="assets/ui-dashboard.png" alt="Controller dashboard: device, alarm, BGP, link, service and validation KPIs, fabric throughput chart and device health table" width="1600" height="1000" loading="eager">
     <figcaption>Fabric dashboard of the running lab: live health of 14 switches and the firewall, config compliance against the intent, alarms, BGP sessions, fabric links, services, throughput and the last validation, polled every 30 seconds.</figcaption></figure>
@@ -265,6 +266,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
       <tr><td>L3 and L2-only networks, multi-tenant VRFs, hypervisor trunks</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Firewall service insertion (inter-tenant + internet, stateful policy, SNAT)</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Vendor firewall change push: Fortinet FortiGate, Palo Alto Networks, Cisco</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>VMware vCenter integration: VM and ESXi host visibility per switch port, networks provisioned from port groups, vMotion tracked</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>External VRF-lite handoff per tenant</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Plan / diff, transactional deploy, rollback, drift detection</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Web UI and REST API</td><td><span class="pill ok">Fully Supported</span></td></tr>
