@@ -90,14 +90,14 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
 
 <main id="top">
 <div class="wrap hero">
-  <h1>Fully automated Day 1 VXLAN EVPN fabric orchestration and management on SONiC.</h1>
+  <h1>VXLAN EVPN Fabric Orchestration and Management</h1>
   <p class="lead"><b>SONiC OrchestX</b> is a fabric orchestrator for SONiC switches. Describe your fabric and tenant services once: it renders, diffs and deploys SONiC configuration, proves the result (control plane, cabling and a full connectivity matrix including tenant isolation), and is a complete Day 2 monitoring and operations solution.</p>
   <div class="cta"><a class="btn primary" href="#proof">See the lab results</a><a class="btn" href="#ops">Day-2 operations</a></div>
   <div class="stats">
     <div class="stat"><b>2 sites</b><span>DC1 + DC2 joined by an EVPN DCI</span></div>
     <div class="stat"><b>14 switches</b><span>two symmetric sites, 7 switches each</span></div>
     <div class="stat"><b>381 / 381</b><span>automated checks passing</span></div>
-    <div class="stat"><b>Firewall</b><span>policy-enforced between tenants and to the internet</span></div>
+    <div class="stat"><b>Vendor Firewall Integration</b><span>Fortinet, Palo Alto, Cisco: tenant policy pushed as intent</span></div>
   </div>
   <figure class="shot"><img src="assets/ui-dashboard.png" alt="Controller dashboard: device, alarm, BGP, link, service and validation KPIs, fabric throughput chart and device health table" width="1600" height="1000" loading="eager">
     <figcaption>Fabric dashboard of the running lab: live health of 14 switches and the firewall, config compliance against the intent, alarms, BGP sessions, fabric links, services, throughput and the last validation, polled every 30 seconds.</figcaption></figure>
@@ -249,7 +249,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
 
 <section id="capabilities"><div class="wrap">
   <h2>Capabilities</h2>
-  <p class="sub">Every capability below is implemented and proven on the live two-site lab.</p>
+  <p class="sub">What SONiC OrchestX does today and for your fabric.</p>
   <div class="table"><table>
     <thead><tr><th>Capability</th><th>Status</th></tr></thead>
     <tbody>
@@ -257,6 +257,7 @@ footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px soli
       <tr><td>Multi-site with border-to-border DCI</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>L3 and L2-only networks, multi-tenant VRFs, hypervisor trunks</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Firewall service insertion (inter-tenant + internet, stateful policy, SNAT)</td><td><span class="pill ok">Fully Supported</span></td></tr>
+      <tr><td>Vendor firewall change push: Fortinet FortiGate, Palo Alto Networks, Cisco</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>External VRF-lite handoff per tenant</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Plan / diff, transactional deploy, rollback, drift detection</td><td><span class="pill ok">Fully Supported</span></td></tr>
       <tr><td>Web UI and REST API</td><td><span class="pill ok">Fully Supported</span></td></tr>
